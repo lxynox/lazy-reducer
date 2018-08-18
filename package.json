@@ -1,8 +1,8 @@
 {
   "name": "lazy-reducer-hoc",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "react HOC that loads reducer on demand",
-  "main": "lib/index.js",
+  "main": "lib/main.js",
   "repository": "git@gh-lxynox:lxynox/lazy-reducer.git",
   "author": "lxynox <lxynox@gmail.com>",
   "license": "MIT",
@@ -19,8 +19,8 @@
     "lint": "xo",
     "dev": "cross-env NODE_ENV=development webpack-dev-server --hot --inline --open",
     "dev:example": "cross-env NODE_ENV=development webpack-dev-server --config example/webpack.config.js --hot --inline --open",
-    "build:dev": "cross-env NODE_ENV=development webpack",
-    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
