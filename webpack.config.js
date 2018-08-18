@@ -1,8 +1,10 @@
 const path = require('path')
 const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const pkg = require('./package.json')
 
-const DIRS = {SRC: 'lib/', DIST: 'dist/'}
+const resolve = p => path.resolve(__dirname, p)
+
+const DIRS = {SRC: 'src', DIST: 'lib'}
 
 const baseConfig = {
   entry: resolve(DIRS.SRC),
@@ -10,29 +12,21 @@ const baseConfig = {
     publicPath: '/',
     path: resolve(DIRS.DIST),
     filename: '[name].js',
-    chunkFilename: 'chunk-[name].js'
-    // library: '',
-    // libraryTarget: 'umd'
+    library: pkg.name,
+    libraryTarget: 'umd'
   },
   module: {
-    rules: [{
-      test: /\.js|jsx$/,
-      use: 'babel-loader',
-      exclude: /node_modules/
-    }, {
-      test: /\.css$/,
-      use: [ 'style-loader', 'css-loader' ]
-    }, {
-      test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
-      loader: 'url-loader',
-      options: {
-        limit: 10000
+    rules: [
+      {
+        test: /\.js|jsx$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
       }
-    }]
-  },
+    ]
+  }
 }
 
-if (process.env.NODE === 'production') {
+if (process.env.NODE_ENV === 'production') {
   module.exports = withProd(baseConfig)
 } else {
   module.exports = withDev(baseConfig)
@@ -50,11 +44,7 @@ function withDev(config) {
     },
     plugins: [
       new webpack.DefinePlugin({
-       'process.env': { 'NODE_ENV': JSON.stringify('development') }
-      }),
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: 'template.html'
+        'process.env': {NODE_ENV: JSON.stringify('development')}
       })
     ]
   })
@@ -62,25 +52,11 @@ function withDev(config) {
 
 function withProd(config) {
   return Object.assign({}, config, {
-    output: Object.assign({}, config.output, {
-      filename: '[name].[chunkhash].js',
-      chunkFilename: '[name].[chunkhash].js'
-    }),
+    mode: 'production',
     plugins: [
       new webpack.DefinePlugin({
-       'process.env': { 'NODE_ENV': JSON.stringify('production') }
-      }),
-      new HtmlWebpackPlugin({
-        filename: 'index.html',
-        template: 'template.html',
-        minify   : {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeAttributeQuotes: true
-        }
-      }),
+        'process.env': {NODE_ENV: JSON.stringify('production')}
+      })
     ]
   })
 }
-
-function resolve(p) { return path.resolve(__dirname, p) }
