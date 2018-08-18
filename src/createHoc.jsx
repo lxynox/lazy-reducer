@@ -2,7 +2,7 @@ import React from 'react'
 import {object} from 'prop-types'
 import createReducerRegistry from './createReducerRegistry'
 
-const createRegisterReducer = rootReducer => (reducers = {}) => Component =>
+const createHoc = rootReducer => (reducers = {}) => Component =>
   class ReducerInjector extends React.Component {
     static contextTypes = {
       store: object.isRequired,
@@ -17,14 +17,14 @@ const createRegisterReducer = rootReducer => (reducers = {}) => Component =>
     }
 
     componentWillUnmount() {
-      if (Object.keys(reducers).length === 0) return;
+      if (Object.keys(reducers).length === 0) return
       this.reducerRegistry.reset();
       this.context.store.replaceReducer(this.reducerRegistry.getReducer())
     }
 
     render() {
-      return React.createElement(Component, this.props);
+      return React.createElement(Component, this.props)
     }
   }
 
-export default createRegisterReducer
+export default createHoc
