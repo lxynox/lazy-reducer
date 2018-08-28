@@ -1,16 +1,13 @@
 const path = require('path')
 const webpack = require('webpack')
 const pkg = require('./package.json')
-
 const resolve = p => path.resolve(__dirname, p)
 
-const DIRS = {SRC: 'src', DIST: 'lib'}
-
 const baseConfig = {
-  entry: resolve(DIRS.SRC),
+  mode: 'none',
   output: {
     publicPath: '/',
-    path: resolve(DIRS.DIST),
+    path: resolve('lib'),
     filename: '[name].js',
     library: pkg.name,
     libraryTarget: 'umd'
