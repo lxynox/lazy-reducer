@@ -5,13 +5,11 @@ const NOOP = () => {}
 const createReducerRegistry = (baseReducer = NOOP) => {
   let currentReducer
   let loadedReducers
-  let initialState
   let baseState
   let loadedState
 
   const createReducer = loadedReducer => (state = {}, action) => {
-    if (initialState == null) initialState = baseState = state
-    if (loadedState == null) baseState = initialState
+    if (baseState == null) baseState = state
     const nextBaseState = baseReducer(baseState, action)
     const nextLoadedState = loadedReducer(loadedState, action)
     const changed =
